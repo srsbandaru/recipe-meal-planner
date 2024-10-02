@@ -1,0 +1,16 @@
+{% extends "account/base_entrance.html" %}
+{% load bootstrap5 %}
+{% block title %}
+    Tech Blog - Sign Up
+{% endblock title %}
+{% block content %}
+    <div class="container mt-3">
+        <h1>Sign Up</h1>
+        <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
+        <form action="" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button class="btn btn-primary" type="submit">Sign Up</button>
+        </form>
+    </div>
+{% endblock content %}
