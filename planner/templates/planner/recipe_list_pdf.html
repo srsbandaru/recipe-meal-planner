@@ -1,0 +1,58 @@
+{% extends "base_master.html" %}
+{% block title %}
+    Recipe List PDF
+{% endblock title %}
+{% block content %}
+    <div class="container mt-3">
+        <h1>Hello 
+                    {{request.user.first_name}}
+                  
+                    {{request.user.last_name}} 
+        </h1>
+        <button type="button" class="btn btn-primary" onclick="generatePDF('{{request.user}}')">Download PDF</button>
+        <hr>
+        {% if user.is_authenticated %}
+            <div class="recipe-container">
+                <h1>Recipe Meal Planner</h1>
+                <table class="table table-bordered border-dark">
+                    <thead class="table-info border-dark">
+                        <tr>
+                            <th>Day</th>
+                            <th>Time</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    {% for recipe in recipe_list %}
+                        <tr>
+                            <td>{{recipe.get_weekday_label}}</td>
+                            <td>{{recipe.get_meal_type_label}}</td>
+                            <td>{{recipe.recipe_name}}</td>
+                            <td>{{recipe.recipe_description}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <p>Meal Plan designed by <span class="text-primary fw-bold">{{request.user}}</span>.</p>
+            </div>
+            <button class="btn btn-secondary" onclick="window.location = '{% url 'planner:recipe_list' %}'">Back</button>
+        </div>
+        {% endif %}
+        
+        
+    <!-- html2pdf -->
+    <!-- Reference: https://ekoopmans.github.io/html2pdf.js/ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function generatePDF(username)
+        {
+            var element = document.querySelector('.recipe-container');
+            var opt = {
+                margin: 1,
+                // filename: username + "_recipe_meal_planner.pdf",
+                filename: username.concat("_meal_planner.pdf"),
+                jsPDF: {unit: 'in', format: 'a4', orientation: 'landscape'}
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+{% endblock content %}

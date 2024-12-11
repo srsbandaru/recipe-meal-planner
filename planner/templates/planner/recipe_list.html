@@ -1,0 +1,41 @@
+{% extends "base_master.html" %}
+{% block title %}
+    Recipe List
+{% endblock title %}
+{% load static %}
+{% block content %}
+    <div class="container mt-3">
+        <h1>Recipes</h1> 
+        <button class="btn btn-primary mt-2 mb-2" onclick="window.location = '{% url 'planner:recipe_create' %}'">Create Recipe</button>
+        {% if recipe_list %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Day</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Recipe Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                {% for recipe in recipe_list %}
+                    <tr>
+                        <td>{{recipe.get_weekday_label}}</td>
+                        <td>{{recipe.get_meal_type_label}}</td>
+                        <td>{{recipe.recipe_name}}</td>
+                        <td>{{recipe.recipe_description}}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="window.location = '{% url 'planner:recipe_update' recipe.id %}'">Edit</button>
+                            <button class="btn btn-danger" onclick="window.location = '{% url 'planner:recipe_delete' recipe.id %}'">Delete</button>
+                        </td>
+                    </tr>                    
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="alert alert-info mt-3">
+                <p>There are no recipes in database.</p>
+            </div>
+        {% endif %}
+        <button type="button" class="btn btn-info" onclick="window.location = '{% url 'planner:recipe_list_pdf' %}'">Generate PDF</button>
+    </div>
+{% endblock content %}
